@@ -1,7 +1,7 @@
 use crate::{
     ext_token, Contract, ContractExt, Role, FT_TRANSFER_CALL_GAS, ONE_YOCTO,
 };
-use near_plugins::{access_control_any, pause, AccessControllable, Pausable};
+use near_plugins::{pause, AccessControllable, Pausable};
 use near_sdk::json_types::{U128, U64};
 use near_sdk::{
     env, near, require, serde_json, AccountId, Gas, Promise, PromiseError, PromiseOrValue,
