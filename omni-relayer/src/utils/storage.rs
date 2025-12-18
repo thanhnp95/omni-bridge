@@ -33,6 +33,7 @@ pub async fn get_token_id(
         }
         ChainKind::Btc => Ok(OmniAddress::Btc(token_address.to_string())),
         ChainKind::Zcash => Ok(OmniAddress::Zcash(token_address.to_string())),
+        ChainKind::Dcr => Ok(OmniAddress::Dcr(token_address.to_string())),
     }
     .map_err(|_| format!("Failed to convert token address to OmniAddress: {token_address:?}",))?;
 

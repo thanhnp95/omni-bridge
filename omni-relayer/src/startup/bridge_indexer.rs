@@ -33,7 +33,7 @@ fn get_evm_config(config: &config::Config, chain_kind: ChainKind) -> Result<&con
         ChainKind::Arb => config.arb.as_ref().context("EVM config for Arb is not set"),
         ChainKind::Bnb => config.bnb.as_ref().context("EVM config for Bnb is not set"),
         ChainKind::Pol => config.pol.as_ref().context("EVM config for Pol is not set"),
-        ChainKind::Near | ChainKind::Sol | ChainKind::Btc | ChainKind::Zcash => {
+        ChainKind::Near | ChainKind::Sol | ChainKind::Btc | ChainKind::Zcash | ChainKind::Dcr => {
             anyhow::bail!("Unsupported chain kind for EVM: {chain_kind:?}")
         }
     }

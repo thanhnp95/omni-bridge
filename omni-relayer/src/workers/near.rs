@@ -476,8 +476,8 @@ pub async fn process_sign_transfer_event(
                 None,
             )
         }
-        ChainKind::Btc | ChainKind::Zcash => {
-            anyhow::bail!("Finishing BTC/ZEC transfers is not supported");
+        ChainKind::Btc | ChainKind::Zcash | ChainKind::Dcr => {
+            anyhow::bail!("Finishing BTC/ZEC/DCR transfers is not supported");
         }
     };
 
@@ -513,7 +513,7 @@ pub async fn process_sign_transfer_event(
                     ChainKind::Arb => &config.arb,
                     ChainKind::Bnb => &config.bnb,
                     ChainKind::Pol => &config.pol,
-                    ChainKind::Near | ChainKind::Sol | ChainKind::Btc | ChainKind::Zcash => {
+                    ChainKind::Near | ChainKind::Sol | ChainKind::Btc | ChainKind::Zcash | ChainKind::Dcr => {
                         anyhow::bail!(
                             "Failed to finalize deposit (unexpected: failed to get evm config): {err}"
                         );

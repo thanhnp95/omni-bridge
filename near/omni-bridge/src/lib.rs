@@ -38,6 +38,7 @@ use storage::{
 };
 
 mod btc;
+mod dcr;
 mod helpers;
 mod migrate;
 mod storage;
@@ -862,10 +863,10 @@ impl Contract {
         relayer_id: AccountId,
     ) {
         if fast_transfer.recipient.is_utxo_chain() {
-            let btc_account_id = self.get_utxo_chain_token(fast_transfer.recipient.get_chain());
+            let utxo_chain_account_id = self.get_utxo_chain_token(fast_transfer.recipient.get_chain());
             require!(
-                fast_transfer.token_id == btc_account_id,
-                "Only BTC can be transferred to the Bitcoin network."
+                fast_transfer.token_id == utxo_chain_account_id,
+                "Only the native token of this UTXO chain can be transferred."
             );
         }
 
@@ -1750,10 +1751,10 @@ impl Contract {
         let token = self.get_token_id(&transfer_message.token);
 
         if transfer_message.recipient.is_utxo_chain() {
-            let btc_account_id = self.get_utxo_chain_token(transfer_message.recipient.get_chain());
+            let utxo_chain_account_id = self.get_utxo_chain_token(transfer_message.recipient.get_chain());
             require!(
-                token == btc_account_id,
-                "Only BTC can be transferred to the Bitcoin network."
+                token == utxo_chain_account_id,
+                "Only the native token of this UTXO chain can be transferred."
             );
         }
 

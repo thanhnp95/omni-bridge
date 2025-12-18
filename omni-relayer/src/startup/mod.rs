@@ -55,6 +55,11 @@ fn build_utxo_bridges(
             config.near.zcash_connector.as_ref(),
             config.near.zcash.as_ref(),
         ),
+        (
+            ChainKind::Dcr,
+            config.near.dcr_connector.as_ref(),
+            config.near.dcr.as_ref(),
+        ),
     ] {
         utxo_bridges.insert(
             chain,
@@ -93,7 +98,7 @@ fn build_evm_bridge_client(
         ChainKind::Arb => &config.arb,
         ChainKind::Bnb => &config.bnb,
         ChainKind::Pol => &config.pol,
-        ChainKind::Near | ChainKind::Sol | ChainKind::Btc | ChainKind::Zcash => {
+        ChainKind::Near | ChainKind::Sol | ChainKind::Btc | ChainKind::Zcash | ChainKind::Dcr => {
             unreachable!("Function `build_evm_bridge_client` supports only EVM chains")
         }
     };
@@ -143,6 +148,7 @@ fn build_utxo_bridge_client<C: utxo_bridge_client::types::UTXOChain>(
     let utxo = match chain {
         ChainKind::Btc => &config.btc,
         ChainKind::Zcash => &config.zcash,
+        ChainKind::Dcr => &config.dcr,
         ChainKind::Near
         | ChainKind::Eth
         | ChainKind::Base
@@ -174,6 +180,7 @@ fn build_light_client(config: &config::Config, chain: ChainKind) -> Result<Optio
             .zcash
             .as_ref()
             .map(|zcash| zcash.light_client.clone()),
+        ChainKind::Dcr => config.dcr.as_ref().map(|dcr| dcr.light_client.clone()),
         ChainKind::Near
         | ChainKind::Base
         | ChainKind::Arb
@@ -212,10 +219,12 @@ pub fn build_omni_connector(
     let solana_bridge_client = build_solana_bridge_client(config)?;
     let btc_bridge_client = build_utxo_bridge_client(config, ChainKind::Btc)?;
     let zcash_bridge_client = build_utxo_bridge_client(config, ChainKind::Zcash)?;
+    let dcr_bridge_client = build_utxo_bridge_client(config, ChainKind::Dcr)?;
     let wormhole_bridge_client = build_wormhole_bridge_client(config)?;
     let eth_light_client = build_light_client(config, ChainKind::Eth)?;
     let btc_light_client = build_light_client(config, ChainKind::Btc)?;
     let zcash_light_client = build_light_client(config, ChainKind::Zcash)?;
+    let dcr_light_client = build_light_client(config, ChainKind::Dcr)?;
 
     let omni_connector = OmniConnectorBuilder::default()
         .network(Some(config.near.network.into()))
@@ -229,9 +238,11 @@ pub fn build_omni_connector(
         .wormhole_bridge_client(Some(wormhole_bridge_client))
         .btc_bridge_client(Some(btc_bridge_client))
         .zcash_bridge_client(Some(zcash_bridge_client))
+        .dcr_bridge_client(Some(dcr_bridge_client))
         .eth_light_client(eth_light_client)
         .btc_light_client(btc_light_client)
         .zcash_light_client(zcash_light_client)
+        .dcr_light_client(dcr_light_client)
         .build()
         .context("Failed to build OmniConnector")?;
 

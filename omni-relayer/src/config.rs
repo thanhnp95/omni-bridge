@@ -24,7 +24,7 @@ pub fn get_private_key(chain_kind: ChainKind, near_signer_type: Option<NearSigne
         ChainKind::Bnb => "BNB_PRIVATE_KEY",
         ChainKind::Pol => "POL_PRIVATE_KEY",
         ChainKind::Sol => "SOLANA_PRIVATE_KEY",
-        ChainKind::Btc | ChainKind::Zcash => unreachable!("No private key for UTXO chains"),
+        ChainKind::Btc | ChainKind::Zcash | ChainKind::Dcr => unreachable!("No private key for UTXO chains"),
     };
 
     std::env::var(env_var).unwrap_or_else(|_| panic!("Failed to get `{env_var}` env variable"))
@@ -106,6 +106,7 @@ pub struct Config {
     pub solana: Option<Solana>,
     pub btc: Option<Utxo>,
     pub zcash: Option<Utxo>,
+    pub dcr: Option<Utxo>,
     pub wormhole: Wormhole,
 }
 
@@ -126,6 +127,7 @@ impl Config {
         let config = match chain {
             ChainKind::Btc => self.btc.as_ref(),
             ChainKind::Zcash => self.zcash.as_ref(),
+            ChainKind::Dcr => self.dcr.as_ref(),
             ChainKind::Near
             | ChainKind::Eth
             | ChainKind::Base
@@ -143,6 +145,7 @@ impl Config {
         let config = match chain {
             ChainKind::Btc => self.btc.as_ref(),
             ChainKind::Zcash => self.zcash.as_ref(),
+            ChainKind::Dcr => self.dcr.as_ref(),
             ChainKind::Near
             | ChainKind::Eth
             | ChainKind::Base
@@ -227,6 +230,8 @@ pub struct Near {
     pub btc: Option<AccountId>,
     pub zcash_connector: Option<AccountId>,
     pub zcash: Option<AccountId>,
+    pub dcr_connector: Option<AccountId>,
+    pub dcr: Option<AccountId>,
     pub omni_credentials_path: Option<String>,
     pub fast_credentials_path: Option<String>,
     pub sign_without_checking_fee: Option<Vec<OmniAddress>>,
